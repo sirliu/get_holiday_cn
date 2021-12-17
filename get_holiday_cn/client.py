@@ -29,7 +29,8 @@ interface Holidays {
   }[]
 }
 """
-import datetime, requests,json
+import datetime, requests,json,tempfile
+
 
 class YearKeyError(Exception):
     '''自定义异常：年份异常'''
@@ -63,13 +64,13 @@ class getHoliday(object):
         :return:
         '''
         try:
-            with open(f"{current_year}.json",'r',encoding='utf-8') as f:
+            with open(f"{tempfile.gettempdir()}/{current_year}.json",'r',encoding='utf-8') as f:
                 return json.load(f)['days']
         except:
             url = 'https://cdn.jsdelivr.net/gh/NateScarlet/holiday-cn@master/{year}.json'.format(year=current_year)
             res = requests.get(url=url)
             if res.status_code == 200:
-                with open(f"{current_year}.json",'w' ,encoding='utf-8') as f:
+                with open(f"{tempfile.gettempdir()}/{current_year}.json",'w' ,encoding='utf-8') as f:
                     json.dump(res.json(),f,ensure_ascii=False,indent=4)
                 return res.json()['days']
             else:
@@ -79,7 +80,7 @@ class getHoliday(object):
                 if res.status_code == 404:
                     raise YearKeyError(current_year)
                 else:
-                    with open(f"{current_year}.json",'w' ,encoding='utf-8') as f:
+                    with open(f"{tempfile.gettempdir()}/{current_year}.json",'w' ,encoding='utf-8') as f:
                         json.dump(res.json(),f,ensure_ascii=False,indent=4)
                 return res.json()['days']
 
