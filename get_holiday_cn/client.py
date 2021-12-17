@@ -196,7 +196,7 @@ class getHoliday(object):
             }
             if today_data['isOffDay'] is False:
                 d_dict['holiday'] = False
-                d_dict['name'] += '调休'
+                d_dict['name'] += '-法定上班'
             json_data['holiday'] = d_dict
         return json_data
 
